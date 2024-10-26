@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>To Do List📝</h1>
+    <div class="div">
+        <input id="input" type="text" placeholder="enter the text" >
+        <button  id="Add"onclick="add()">Add</button>
+        <ol id="list-container">
+            <li>hello
+                <button style="background-color: yellow; border-radius: 20px; border:none;" onclick="Delete(event)">Delete</button>
+            </li>
+        </ol>
+        <script>
+            var ol=document.getElementById("list-container")
+            var input=document.getElementById("input")
+            
+            function add()
+            {
+                var listitem=document.createElement("li")
+                listitem.innerHTML=input.value+"<button id='del'style='margin: 10px; background-color:yellow; border:none; border-radius:20px;' onclick='Delete(event)'>Delete</button>"//if we give textcontent instead of inner html button will not be created insted the same string will be created
+                listitem.onclick=strike;
+                ol.append(listitem)
+                input.value=""
+            }
+            function Delete(event)
+            {
+                event.target.parentElement.remove()
+
+            }
+            function strike(event)
+            {
+                if(event.target.tagName === "LI")
+                {
+                    event.target.style.textDecoration=event.target.style.textDecoration ==="line-through" ? "none" : "line-through";
+                }
+            }
+           
+           
+            
+        </script>
+    </div>
+    
+</body>
+</html>
