@@ -9,42 +9,95 @@
 <body>
     <h1>To Do List📝</h1>
     <div class="div">
-        <input id="input" type="text" placeholder="enter the text" >
-        <button  id="Add"onclick="add()">Add</button>
-        <ol id="list-container">
-            <li>hello
-                <button style="background-color: yellow; border-radius: 20px; border:none;" onclick="Delete(event)">Delete</button>
-            </li>
-        </ol>
+        <input id="input" type="text" placeholder="Enter the text">
+        <button id="Add" onclick="add()">Add</button>
+        <ol id="list-container"></ol>
         <script>
-            var ol=document.getElementById("list-container")
-            var input=document.getElementById("input")
-            
-            function add()
-            {
-                var listitem=document.createElement("li")
-                listitem.innerHTML=input.value+"<button id='del'style='margin: 10px; background-color:yellow; border:none; border-radius:20px;' onclick='Delete(event)'>Delete</button>"//if we give textcontent instead of inner html button will not be created insted the same string will be created
-                listitem.onclick=strike;
-                ol.append(listitem)
-                input.value=""
-            }
-            function Delete(event)
-            {
-                event.target.parentElement.remove()
+            var ol = document.getElementById("list-container");
+            var input = document.getElementById("input");
+            var currentItem = null; 
+            function add() {
+                if (input.value.trim() === "") {
+                    alert("Please enter a task."); 
+                    return; 
+                }
 
+                if (currentItem) {
+                    currentItem.firstChild.textContent = input.value; 
+                    currentItem = null; 
+                } else {
+                    var listitem = document.createElement("li");
+                    
+                    
+                    var taskText = document.createElement("span");
+                    taskText.textContent = input.value;
+
+                    
+                    var editInput = document.createElement("input");
+                    editInput.type = "text";
+                    editInput.style.display = "none";
+                    editInput.placeholder = "Edit task";
+
+                    
+                    var delButton = document.createElement("button");
+                    delButton.textContent = "Delete";
+                    delButton.style.margin = "10px";
+                    delButton.style.backgroundColor = "yellow";
+                    delButton.style.border = "none";
+                    delButton.style.borderRadius = "20px";
+                    delButton.onclick = function(event) {
+                        Delete(event);
+                    };
+
+                    
+                    var editButton = document.createElement("button");
+                    editButton.textContent = "Edit";
+                    editButton.style.margin = "10px";
+                    editButton.style.backgroundColor = "yellow";
+                    editButton.style.border = "none";
+                    editButton.style.borderRadius = "20px";
+                    editButton.onclick = function() {
+                        edit(taskText, editInput); 
+                    };
+
+                    listitem.appendChild(taskText);
+                    listitem.appendChild(editInput);
+                    listitem.appendChild(delButton);
+                    listitem.appendChild(editButton);
+                    listitem.onclick = strike;
+
+                    ol.appendChild(listitem);
+                }
+                
+                input.value = ""; 
             }
-            function strike(event)
-            {
-                if(event.target.tagName === "LI")
-                {
-                    event.target.style.textDecoration=event.target.style.textDecoration ==="line-through" ? "none" : "line-through";
+
+            function Delete(event) {
+                event.target.parentElement.remove();
+            }
+
+            function edit(taskText, editInput) {
+                
+                editInput.style.display = "inline-block";
+                editInput.value = taskText.textContent; 
+
+            
+                taskText.style.display = "none"; 
+
+            
+                editInput.onblur = function() {
+                    taskText.textContent = editInput.value; 
+                    taskText.style.display = "inline"; 
+                    editInput.style.display = "none"; 
+                };
+            }
+
+            function strike(event) {
+                if (event.target.tagName === "LI") {
+                    event.target.style.textDecoration = event.target.style.textDecoration === "line-through" ? "none" : "line-through";
                 }
             }
-           
-           
-            
         </script>
     </div>
-    
 </body>
 </html>
