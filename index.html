@@ -15,30 +15,31 @@
         <script>
             var ol = document.getElementById("list-container");
             var input = document.getElementById("input");
-            var currentItem = null; 
+            var currentItem = null;
+
             function add() {
                 if (input.value.trim() === "") {
-                    alert("Please enter a task."); 
-                    return; 
+                    alert("Please enter a task.");
+                    return;
                 }
 
                 if (currentItem) {
-                    currentItem.firstChild.textContent = input.value; 
-                    currentItem = null; 
+                    currentItem.firstChild.textContent = input.value;
+                    currentItem = null;
                 } else {
                     var listitem = document.createElement("li");
-                    
-                    
+
                     var taskText = document.createElement("span");
                     taskText.textContent = input.value;
 
-                    
+                    // We add an event listener for striking the text when it's clicked.
+                    taskText.onclick = strike;
+
                     var editInput = document.createElement("input");
                     editInput.type = "text";
                     editInput.style.display = "none";
                     editInput.placeholder = "Edit task";
 
-                    
                     var delButton = document.createElement("button");
                     delButton.textContent = "Delete";
                     delButton.style.margin = "10px";
@@ -49,27 +50,26 @@
                         Delete(event);
                     };
 
-                    
                     var editButton = document.createElement("button");
                     editButton.textContent = "Edit";
                     editButton.style.margin = "10px";
                     editButton.style.backgroundColor = "yellow";
                     editButton.style.border = "none";
                     editButton.style.borderRadius = "20px";
-                    editButton.onclick = function() {
-                        edit(taskText, editInput); 
+                    editButton.onclick = function(event) {
+                        event.stopPropagation(); // Prevent strike from being triggered
+                        edit(taskText, editInput);
                     };
 
                     listitem.appendChild(taskText);
                     listitem.appendChild(editInput);
                     listitem.appendChild(delButton);
                     listitem.appendChild(editButton);
-                    listitem.onclick = strike;
 
                     ol.appendChild(listitem);
                 }
-                
-                input.value = ""; 
+
+                input.value = "";
             }
 
             function Delete(event) {
@@ -77,26 +77,25 @@
             }
 
             function edit(taskText, editInput) {
-                
                 editInput.style.display = "inline-block";
-                editInput.value = taskText.textContent; 
+                editInput.value = taskText.textContent;
 
-            
-                taskText.style.display = "none"; 
+                taskText.style.display = "none";
 
-            
                 editInput.onblur = function() {
-                    taskText.textContent = editInput.value; 
-                    taskText.style.display = "inline"; 
-                    editInput.style.display = "none"; 
+                    taskText.textContent = editInput.value;
+                    taskText.style.display = "inline";
+                    editInput.style.display = "none";
                 };
             }
 
+            // Strike-through functionality: Only strike through when the text (not button) is clicked
             function strike(event) {
-                if (event.target.tagName === "LI") {
+                if (event.target.tagName === "SPAN") {
                     event.target.style.textDecoration = event.target.style.textDecoration === "line-through" ? "none" : "line-through";
                 }
             }
+
         </script>
     </div>
 </body>
